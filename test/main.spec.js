@@ -23,7 +23,7 @@ describe('San Diego Top Spots', function() {
   it('should have the correct page title', function() {
     return nightmare
       .goto(url)
-      .wait('table')
+      .wait('title')
       .evaluate(function () {
         return document.querySelector('title').text
       })
@@ -36,7 +36,7 @@ describe('San Diego Top Spots', function() {
   it('should have a heading', function() {
     return nightmare
       .goto(url)
-      .wait('table')
+      .wait('h1')
       .evaluate(function () {
         return document.querySelector('h1').innerHTML
       })
