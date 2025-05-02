@@ -1,75 +1,58 @@
-const express = require('express');
-const path = require('path');
-var Nightmare = require('nightmare');
-var expect = require('chai').expect;
+// tests/main.spec.js
+const { test, expect } = require('@playwright/test');
+const http = require('http');
+const nodeStatic = require('node-static');
 
-const app = express();
-app.use(express.static(path.join(__dirname, '/../')));
-app.listen(8888);
+const PORT = 8888;
+const url = `http://localhost:${PORT}/index.html`;
 
-const url = 'http://localhost:8888';
+let server;
 
-var nightmare;
-
-describe('San Diego Top Spots', function() {
-  this.timeout(10000);
-  this.slow(3000);
-
-  beforeEach((done) => {
-    nightmare = Nightmare();
-    done();
+test.beforeAll(async () => {
+  const fileServer = new nodeStatic.Server('./', { cache: 0 });
+  server = http.createServer((req, res) => {
+    req.addListener('end', () => {
+      fileServer.serve(req, res);
+    }).resume();
   });
 
-  it('should have the correct page title', function() {
-    return nightmare
-      .goto(url)
-      .wait('title')
-      .evaluate(function () {
-        return document.querySelector('title').text
-      })
-      .end()
-      .then(function(title) {
-        expect(title).to.equal('San Diego Top Spots');
-      })
+  await new Promise(resolve => server.listen(PORT, resolve));
+});
+
+test.afterAll(() => {
+  server.close();
+});
+
+test.describe('San Diego Top Spots', () => {
+  test('should load successfully', async ({ request }) => {
+    const response = await request.get(url);
+    expect(response.status()).toBe(200);
   });
 
-  it('should have a heading', function() {
-    return nightmare
-      .goto(url)
-      .wait('h1')
-      .evaluate(function () {
-        return document.querySelector('h1').innerHTML
-      })
-      .end()
-      .then(function(text) {
-        expect(text).to.equal("San Diego Top Spots");
-      })
-  });
+  test.describe('HTML structure', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto(url);
+    });
 
-  it('should find a row with data', function() {
-    return nightmare
-      .goto(url)
-      .wait('table')
-      .evaluate(function () {
-        return document.querySelector('tr td').innerHTML
-      })
-      .end()
-      .then(function(text) {
-        expect(text).to.equal("Go For A Run In The San Diego Zoo Safari Park");
-      })
-  });
+    test('should have an H1 with the text "San Diego Top Spots"', async ({ page }) => {
+      const heading = page.locator('h1');
+      await expect(heading).toHaveText('San Diego Top Spots');
+    });
 
-  it('should find a link with the correct map url', function() {
-    nightmare
-      .goto(url)
-      .wait('table')
-      .evaluate(function () {
-        return document.querySelector('tr a').href
-      })
-      .end()
-      .then(function(link) {
-        expect(link).to.equal('https://www.google.com/maps?q=33.09745,-116.99572');
-      })
-  });
+    test('should load the correct page title', async ({ page }) => {
+      await expect(page).toHaveTitle('San Diego Top Spots');
+    });
 
+    test('should find a row with data', async ({ page }) => {
+      await page.goto(url);
+      const firstCellText = await page.locator('table tbody tr td').first().textContent();
+      expect(firstCellText).toBe("Go For A Run In The San Diego Zoo Safari Park");
+    });
+
+    test('should find a link with the correct map url', async ({ page }) => {
+      await page.goto(url);
+      const mapLink = await page.locator('table tbody tr a').first().getAttribute('href');
+      expect(mapLink).toBe('https://www.google.com/maps?q=33.09745,-116.99572');
+    });
+  });
 });

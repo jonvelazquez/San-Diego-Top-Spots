@@ -1,4 +1,4 @@
-$(document).ready(function() {
-// write your code here
+$(document).ready(function () {
+    // write your code here
 
 });

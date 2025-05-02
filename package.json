@@ -1,16 +1,16 @@
 {
     "name": "san-diego-top-spots",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "scripts": {
-        "test": "mocha --exit"
+        "start": "npx node-static . -p 8888",
+        "test": "npx playwright test",
+        "postinstall": "npx playwright install"
+    },
+    "devDependencies": {
+        "@playwright/test": "^1.52.0",
+        "node-static": "^0.7.11"
     },
     "dependencies": {
-        "chai": "^4.0.2",
-        "express": "^4.15.3",
-        "jquery": "^3.2.1",
-        "lodash": "^4.17.4",
-        "mocha": "^5.2.0",
-        "morgan": "^1.8.2",
-        "nightmare": "^2.10.0"
+        "jquery": "^3.7.1"
     }
 }
