@@ -4,7 +4,7 @@
     "scripts": {
         "test": "npx playwright test",
         "postinstall": "npx playwright install",
-        "start": "node-static . -p 8888"
+        "start": "npx node-static public -p 8888"
     },
     "devDependencies": {
         "@playwright/test": "^1.52.0",
