@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Diego Top Spots</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+    .topspots-table-container {
+        background: linear-gradient(135deg, #f0f8ff, #e6f7ff);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    .location-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-right: 10px;
+    }
+    .name-with-img {
+        display: flex;
+        align-items: center;
+    }
+    .maps-button {
+        background-color: #3a73c2 !important;
+        color: white !important;
+        border: none !important;
+        transition: all 0.25s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    .maps-button:hover {
+        background-color: #2f5ea3 !important;
+        color: white !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+    }
+
+    .maps-button:active {
+        transform: translateY(0);
+        box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }
+</style>
+
+<div class="topspots-table-container">
+    <table class="table is-striped is-hoverable is-fullwidth" id="top-spots-table">
+    </table>
+</div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+  <div class="container mt-5">  
+
+    <h1 class="title has-text-centered">San Diego Top Spots</h1>
+
+    <div id="map" style="height: 500px; width: 100%; margin-top: 20px;"></div>
+
+    <table class="table is-striped is-hoverable is-fullwidth" id="top-spots-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Distance</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+  </div>
+
+    <script src="main.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=InsertAPIHere&callback=initMap" async defer></script>
+
+</body>
+</html>
