@@ -1,3 +1,17 @@
+async function loadGoogleMaps() {
+    const res = await fetch('/api/maps-key');
+    const data = await res.json();
+    const key = data.key;
+
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&callback=initMap`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+}
+
+loadGoogleMaps();
+
 function distance(lat1, lon1, lat2, lon2) {
     const R = 3958.8;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -65,7 +79,7 @@ $(document).ready(function () {
 
 let map;
 
-function initMap() {
+window.initMap = function () {
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 10,
         center: { lat: 32.7157, lng: -117.1611 }
